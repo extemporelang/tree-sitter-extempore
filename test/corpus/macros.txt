@@ -1,0 +1,141 @@
+================================================================================
+define-macro simple
+================================================================================
+
+(define-macro (my-macro x)
+  `(println ,x))
+
+--------------------------------------------------------------------------------
+
+(program
+  (list
+    (symbol)
+    (list
+      (symbol)
+      (symbol))
+    (quasiquote
+      (list
+        (symbol)
+        (unquote
+          (symbol))))))
+
+================================================================================
+define-macro with rest args
+================================================================================
+
+(define-macro (when pred . body)
+  `(if ,pred (begin ,@body)))
+
+--------------------------------------------------------------------------------
+
+(program
+  (list
+    (symbol)
+    (list
+      (symbol)
+      (symbol)
+      (symbol))
+    (quasiquote
+      (list
+        (symbol)
+        (unquote
+          (symbol))
+        (list
+          (symbol)
+          (unquote_splicing
+            (symbol)))))))
+
+================================================================================
+xtmtest form
+================================================================================
+
+(xtmtest
+ (bind-func test1
+    (lambda ()
+      (* 5 5)))
+ (test1))
+
+--------------------------------------------------------------------------------
+
+(program
+  (list
+    (symbol)
+    (list
+      (symbol)
+      (symbol)
+      (list
+        (symbol)
+        (list)
+        (list
+          (symbol)
+          (number)
+          (number))))
+    (list
+      (symbol))))
+
+================================================================================
+xtmtest-compile form
+================================================================================
+
+(xtmtest-compile
+ (bind-func test2:[i64,i64]*
+    (lambda (x) (+ x 1))))
+
+--------------------------------------------------------------------------------
+
+(program
+  (list
+    (symbol)
+    (list
+      (symbol)
+      (symbol)
+      (unquote
+        (symbol))
+      (list
+        (symbol)
+        (list
+          (symbol))
+        (list
+          (symbol)
+          (symbol)
+          (number))))))
+
+================================================================================
+macro with cond
+================================================================================
+
+(define-macro (type-check x . types)
+  `(cond ,@(map (lambda (t) `((,t? ,x) #t)) types)
+         (else #f)))
+
+--------------------------------------------------------------------------------
+
+(program
+  (list
+    (symbol)
+    (list
+      (symbol)
+      (symbol)
+      (symbol))
+    (quasiquote
+      (list
+        (symbol)
+        (unquote_splicing
+          (list
+            (symbol)
+            (list
+              (symbol)
+              (list
+                (symbol))
+              (quasiquote
+                (list
+                  (list
+                    (unquote
+                      (symbol))
+                    (unquote
+                      (symbol)))
+                  (boolean))))
+            (symbol)))
+        (list
+          (symbol)
+          (boolean))))))

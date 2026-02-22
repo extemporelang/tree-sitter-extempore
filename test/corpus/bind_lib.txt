@@ -1,0 +1,110 @@
+================================================================================
+bind-lib with closure type
+================================================================================
+
+(bind-lib libcairo cairo_create [cairo_t*,cairo_surface_t*]*)
+
+--------------------------------------------------------------------------------
+
+(program
+  (list
+    (symbol)
+    (symbol)
+    (symbol)
+    (symbol)
+    (unquote
+      (symbol))))
+
+================================================================================
+bind-lib with void return
+================================================================================
+
+(bind-lib libcairo cairo_destroy [void,cairo_t*]*)
+
+--------------------------------------------------------------------------------
+
+(program
+  (list
+    (symbol)
+    (symbol)
+    (symbol)
+    (symbol)
+    (unquote
+      (symbol))))
+
+================================================================================
+bind-lib with multiple args
+================================================================================
+
+(bind-lib libcairo cairo_set_source_rgba [void,cairo_t*,double,double,double,double]*)
+
+--------------------------------------------------------------------------------
+
+(program
+  (list
+    (symbol)
+    (symbol)
+    (symbol)
+    (symbol)
+    (unquote
+      (symbol))
+    (unquote
+      (symbol))
+    (unquote
+      (symbol))
+    (unquote
+      (symbol))
+    (unquote
+      (symbol))))
+
+================================================================================
+bind-lib with simple types
+================================================================================
+
+(bind-lib libm sin [double,double]*)
+
+--------------------------------------------------------------------------------
+
+(program
+  (list
+    (symbol)
+    (symbol)
+    (symbol)
+    (symbol)
+    (unquote
+      (symbol))))
+
+================================================================================
+bind-dylib
+================================================================================
+
+(bind-dylib libm
+  (cond ((string=? (sys:platform) "OSX") "libm.dylib")
+        ((string=? (sys:platform) "Linux") "libm.so")
+        (else "msvcrt.dll")))
+
+--------------------------------------------------------------------------------
+
+(program
+  (list
+    (symbol)
+    (symbol)
+    (list
+      (symbol)
+      (list
+        (list
+          (symbol)
+          (list
+            (symbol))
+          (string))
+        (string))
+      (list
+        (list
+          (symbol)
+          (list
+            (symbol))
+          (string))
+        (string))
+      (list
+        (symbol)
+        (string)))))

@@ -1,0 +1,42 @@
+{
+  "name": "tree-sitter-extempore",
+  "version": "0.1.0",
+  "description": "Tree-sitter grammar for Extempore",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/extemporelang/tree-sitter-extempore"
+  },
+  "license": "BSD-2-Clause",
+  "main": "bindings/node",
+  "types": "bindings/node",
+  "keywords": [
+    "parser",
+    "tree-sitter",
+    "extempore",
+    "xtlang",
+    "scheme"
+  ],
+  "files": [
+    "grammar.js",
+    "binding.gyp",
+    "prebuilds/**",
+    "bindings/node/*",
+    "queries/*",
+    "src/**",
+    "*.wasm"
+  ],
+  "dependencies": {
+    "node-addon-api": "^8.0.0",
+    "node-gyp-build": "^4.8.0"
+  },
+  "devDependencies": {
+    "tree-sitter-cli": "^0.24.0",
+    "prebuildify": "^6.0.0"
+  },
+  "scripts": {
+    "generate": "tree-sitter generate",
+    "test": "tree-sitter test",
+    "parse": "tree-sitter parse",
+    "build": "tree-sitter generate && node-gyp rebuild"
+  }
+}

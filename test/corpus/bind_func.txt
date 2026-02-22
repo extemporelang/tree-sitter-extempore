@@ -1,0 +1,236 @@
+================================================================================
+bind-func with typed arguments
+================================================================================
+
+(bind-func my-test
+  (lambda (a:i64)
+    (* a 5)))
+
+--------------------------------------------------------------------------------
+
+(program
+  (list
+    (symbol)
+    (symbol)
+    (list
+      (symbol)
+      (list
+        (symbol))
+      (list
+        (symbol)
+        (symbol)
+        (number)))))
+
+================================================================================
+bind-func with closure type annotation
+================================================================================
+
+(bind-func first:[!a,!b]*
+  (lambda (a)
+    (tref a 0)))
+
+--------------------------------------------------------------------------------
+
+(program
+  (list
+    (symbol)
+    (symbol)
+    (unquote
+      (symbol))
+    (list
+      (symbol)
+      (list
+        (symbol))
+      (list
+        (symbol)
+        (symbol)
+        (number)))))
+
+================================================================================
+bind-func with complex return type
+================================================================================
+
+(bind-func print:[void,Point*]*
+  (lambda (p)
+    (if (null? p)
+        (begin (printout "<>") void)
+        (begin (printout "<"
+                         (tref p 0) ","
+                         (tref p 1) ">")
+               void))))
+
+--------------------------------------------------------------------------------
+
+(program
+  (list
+    (symbol)
+    (symbol)
+    (unquote
+      (symbol))
+    (list
+      (symbol)
+      (list
+        (symbol))
+      (list
+        (symbol)
+        (list
+          (symbol)
+          (symbol))
+        (list
+          (symbol)
+          (list
+            (symbol)
+            (string))
+          (symbol))
+        (list
+          (symbol)
+          (list
+            (symbol)
+            (string)
+            (list
+              (symbol)
+              (symbol)
+              (number))
+            (string)
+            (list
+              (symbol)
+              (symbol)
+              (number))
+            (string))
+          (symbol))))))
+
+================================================================================
+bind-func with generic types
+================================================================================
+
+(bind-func second:[!b,Pair{!a,!b}*]*
+  (lambda (a)
+    (tref a 1)))
+
+--------------------------------------------------------------------------------
+
+(program
+  (list
+    (symbol)
+    (symbol)
+    (unquote
+      (symbol))
+    (unquote
+      (symbol))
+    (list
+      (symbol)
+      (list
+        (symbol))
+      (list
+        (symbol)
+        (symbol)
+        (number)))))
+
+================================================================================
+bind-func with no type annotations
+================================================================================
+
+(bind-func my-test-1
+  (lambda (a)
+    (* a 5)))
+
+--------------------------------------------------------------------------------
+
+(program
+  (list
+    (symbol)
+    (symbol)
+    (list
+      (symbol)
+      (list
+        (symbol))
+      (list
+        (symbol)
+        (symbol)
+        (number)))))
+
+================================================================================
+bind-func with multiple arguments
+================================================================================
+
+(bind-func add:[i64,i64,i64]*
+  (lambda (a b)
+    (+ a b)))
+
+--------------------------------------------------------------------------------
+
+(program
+  (list
+    (symbol)
+    (symbol)
+    (unquote
+      (symbol))
+    (unquote
+      (symbol))
+    (list
+      (symbol)
+      (list
+        (symbol)
+        (symbol))
+      (list
+        (symbol)
+        (symbol)
+        (symbol)))))
+
+================================================================================
+bind-func with let binding
+================================================================================
+
+(bind-func test-let
+  (lambda ()
+    (let ((x:i64 5)
+          (y 10))
+      (+ x y))))
+
+--------------------------------------------------------------------------------
+
+(program
+  (list
+    (symbol)
+    (symbol)
+    (list
+      (symbol)
+      (list)
+      (list
+        (symbol)
+        (list
+          (list
+            (symbol)
+            (number))
+          (list
+            (symbol)
+            (number)))
+        (list
+          (symbol)
+          (symbol)
+          (symbol))))))
+
+================================================================================
+bind-func with docstring-like comment
+================================================================================
+
+;; multiply a by 5
+(bind-func my-test
+  (lambda (a:i64)
+    (* a 5)))
+
+--------------------------------------------------------------------------------
+
+(program
+  (comment)
+  (list
+    (symbol)
+    (symbol)
+    (list
+      (symbol)
+      (list
+        (symbol))
+      (list
+        (symbol)
+        (symbol)
+        (number)))))

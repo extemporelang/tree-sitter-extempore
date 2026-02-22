@@ -1,0 +1,134 @@
+================================================================================
+ADT pattern match simple
+================================================================================
+
+(ADPoint2D$ p1 (x y)
+  (+ x y)
+  0)
+
+--------------------------------------------------------------------------------
+
+(program
+  (list
+    (symbol)
+    (symbol)
+    (list
+      (symbol)
+      (symbol))
+    (list
+      (symbol)
+      (symbol)
+      (symbol))
+    (number)))
+
+================================================================================
+ADT nested match
+================================================================================
+
+(ADCircle$ circle (p r)
+  (ADPoint2D$ p (x y)
+    (tuple x y)
+    (tuple 0 0))
+  (tuple 0 0))
+
+--------------------------------------------------------------------------------
+
+(program
+  (list
+    (symbol)
+    (symbol)
+    (list
+      (symbol)
+      (symbol))
+    (list
+      (symbol)
+      (symbol)
+      (list
+        (symbol)
+        (symbol))
+      (list
+        (symbol)
+        (symbol)
+        (symbol))
+      (list
+        (symbol)
+        (number)
+        (number)))
+    (list
+      (symbol)
+      (number)
+      (number))))
+
+================================================================================
+ADT either match
+================================================================================
+
+(ADRight$ res (x)
+  (println x)
+  (println "wrong"))
+
+--------------------------------------------------------------------------------
+
+(program
+  (list
+    (symbol)
+    (symbol)
+    (list
+      (symbol))
+    (list
+      (symbol)
+      (symbol))
+    (list
+      (symbol)
+      (string))))
+
+================================================================================
+ADT list cons match
+================================================================================
+
+(ADCons$ lst (x xs)
+  (ADNil$ xs ()
+    (toString_help xs (cat s (toString x)))
+    (toString_help xs (cat s (toString x) (Str ","))))
+  (cat s (Str "]")))
+
+--------------------------------------------------------------------------------
+
+(program
+  (list
+    (symbol)
+    (symbol)
+    (list
+      (symbol)
+      (symbol))
+    (list
+      (symbol)
+      (symbol)
+      (list)
+      (list
+        (symbol)
+        (symbol)
+        (list
+          (symbol)
+          (symbol)
+          (list
+            (symbol)
+            (symbol))))
+      (list
+        (symbol)
+        (symbol)
+        (list
+          (symbol)
+          (symbol)
+          (list
+            (symbol)
+            (symbol))
+          (list
+            (symbol)
+            (string)))))
+    (list
+      (symbol)
+      (symbol)
+      (list
+        (symbol)
+        (string)))))
