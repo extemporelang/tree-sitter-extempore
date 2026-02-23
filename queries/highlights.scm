@@ -12,6 +12,13 @@
   .
   (symbol) @keyword
   .
+  (typed_identifier) @function
+  (#match? @keyword "^bind-func$"))
+
+(list
+  .
+  (symbol) @keyword
+  .
   (symbol) @type.definition
   (#match? @keyword "^bind-type$"))
 
@@ -20,6 +27,13 @@
   (symbol) @keyword
   .
   (symbol) @type.definition
+  (#match? @keyword "^bind-data$"))
+
+(list
+  .
+  (symbol) @keyword
+  .
+  (generic_identifier) @type.definition
   (#match? @keyword "^bind-data$"))
 
 (list
@@ -117,6 +131,11 @@
 (list
   .
   (symbol) @function.call)
+
+; xtlang type expressions
+(xtlang_type) @type
+(typed_identifier) @variable
+(generic_identifier) @type
 
 ; Literals
 (number) @number

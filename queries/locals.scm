@@ -20,13 +20,28 @@
   (symbol) @local.definition
   (#match? @_keyword "^(define|bind-val)$"))
 
-; bind-func name
+; bind-func name (symbol or typed_identifier)
 (list
   .
   (symbol) @_keyword
   .
   (symbol) @local.definition
   (#match? @_keyword "^(bind-func|definec|bind-macro|define-macro)$"))
+
+(list
+  .
+  (symbol) @_keyword
+  .
+  (typed_identifier) @local.definition
+  (#match? @_keyword "^(bind-func|definec)$"))
+
+; bind-data name (generic_identifier)
+(list
+  .
+  (symbol) @_keyword
+  .
+  (generic_identifier) @local.definition
+  (#match? @_keyword "^bind-data$"))
 
 ; Symbol references
 (symbol) @local.reference

@@ -1,11 +1,19 @@
 ; tags.scm --- Extempore code navigation (ctags-like)
 
-; bind-func defines a function
+; bind-func defines a function (name as symbol)
 (list
   .
   (symbol) @_keyword
   .
   (symbol) @name
+  (#match? @_keyword "^(bind-func|definec|definec:dsp|bind-instrument|bind-sampler)$")) @definition.function
+
+; bind-func defines a function (name as typed_identifier)
+(list
+  .
+  (symbol) @_keyword
+  .
+  (typed_identifier) @name
   (#match? @_keyword "^(bind-func|definec|definec:dsp|bind-instrument|bind-sampler)$")) @definition.function
 
 ; define with a list (function shorthand)
@@ -33,6 +41,14 @@
   .
   (symbol) @name
   (#match? @_keyword "^(bind-type|bind-data|bind-alias)$")) @definition.type
+
+; bind-data with generic_identifier
+(list
+  .
+  (symbol) @_keyword
+  .
+  (generic_identifier) @name
+  (#match? @_keyword "^bind-data$")) @definition.type
 
 ; define-macro defines a macro
 (list
