@@ -6,7 +6,7 @@
     "type": "git",
     "url": "https://github.com/extemporelang/tree-sitter-extempore"
   },
-  "license": "BSD-2-Clause",
+  "license": "MIT",
   "main": "bindings/node",
   "types": "bindings/node",
   "keywords": [
