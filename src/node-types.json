@@ -44,6 +44,10 @@
           "named": true
         },
         {
+          "type": "generic_identifier",
+          "named": true
+        },
+        {
           "type": "list",
           "named": true
         },
@@ -68,6 +72,10 @@
           "named": true
         },
         {
+          "type": "typed_identifier",
+          "named": true
+        },
+        {
           "type": "unquote",
           "named": true
         },
@@ -77,6 +85,10 @@
         },
         {
           "type": "vector",
+          "named": true
+        },
+        {
+          "type": "xtlang_type",
           "named": true
         }
       ]
@@ -108,6 +120,10 @@
           "named": true
         },
         {
+          "type": "generic_identifier",
+          "named": true
+        },
+        {
           "type": "list",
           "named": true
         },
@@ -132,6 +148,10 @@
           "named": true
         },
         {
+          "type": "typed_identifier",
+          "named": true
+        },
+        {
           "type": "unquote",
           "named": true
         },
@@ -141,6 +161,10 @@
         },
         {
           "type": "vector",
+          "named": true
+        },
+        {
+          "type": "xtlang_type",
           "named": true
         }
       ]
@@ -171,6 +195,10 @@
           "named": true
         },
         {
+          "type": "generic_identifier",
+          "named": true
+        },
+        {
           "type": "list",
           "named": true
         },
@@ -195,6 +223,10 @@
           "named": true
         },
         {
+          "type": "typed_identifier",
+          "named": true
+        },
+        {
           "type": "unquote",
           "named": true
         },
@@ -204,6 +236,10 @@
         },
         {
           "type": "vector",
+          "named": true
+        },
+        {
+          "type": "xtlang_type",
           "named": true
         }
       ]
@@ -234,6 +270,10 @@
           "named": true
         },
         {
+          "type": "generic_identifier",
+          "named": true
+        },
+        {
           "type": "list",
           "named": true
         },
@@ -258,6 +298,10 @@
           "named": true
         },
         {
+          "type": "typed_identifier",
+          "named": true
+        },
+        {
           "type": "unquote",
           "named": true
         },
@@ -267,6 +311,10 @@
         },
         {
           "type": "vector",
+          "named": true
+        },
+        {
+          "type": "xtlang_type",
           "named": true
         }
       ]
@@ -312,6 +360,10 @@
           "named": true
         },
         {
+          "type": "generic_identifier",
+          "named": true
+        },
+        {
           "type": "list",
           "named": true
         },
@@ -336,6 +388,10 @@
           "named": true
         },
         {
+          "type": "typed_identifier",
+          "named": true
+        },
+        {
           "type": "unquote",
           "named": true
         },
@@ -345,6 +401,10 @@
         },
         {
           "type": "vector",
+          "named": true
+        },
+        {
+          "type": "xtlang_type",
           "named": true
         }
       ]
@@ -375,6 +435,10 @@
           "named": true
         },
         {
+          "type": "generic_identifier",
+          "named": true
+        },
+        {
           "type": "list",
           "named": true
         },
@@ -399,6 +463,10 @@
           "named": true
         },
         {
+          "type": "typed_identifier",
+          "named": true
+        },
+        {
           "type": "unquote",
           "named": true
         },
@@ -408,6 +476,10 @@
         },
         {
           "type": "vector",
+          "named": true
+        },
+        {
+          "type": "xtlang_type",
           "named": true
         }
       ]
@@ -438,6 +510,10 @@
           "named": true
         },
         {
+          "type": "generic_identifier",
+          "named": true
+        },
+        {
           "type": "list",
           "named": true
         },
@@ -462,6 +538,10 @@
           "named": true
         },
         {
+          "type": "typed_identifier",
+          "named": true
+        },
+        {
           "type": "unquote",
           "named": true
         },
@@ -471,6 +551,10 @@
         },
         {
           "type": "vector",
+          "named": true
+        },
+        {
+          "type": "xtlang_type",
           "named": true
         }
       ]
@@ -533,11 +617,23 @@
     "named": true
   },
   {
+    "type": "generic_identifier",
+    "named": true
+  },
+  {
     "type": "number",
     "named": true
   },
   {
     "type": "symbol",
+    "named": true
+  },
+  {
+    "type": "typed_identifier",
+    "named": true
+  },
+  {
+    "type": "xtlang_type",
     "named": true
   },
   {

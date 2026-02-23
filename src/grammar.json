@@ -125,6 +125,18 @@
         },
         {
           "type": "SYMBOL",
+          "name": "xtlang_type"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "typed_identifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "generic_identifier"
+        },
+        {
+          "type": "SYMBOL",
           "name": "symbol"
         },
         {
@@ -914,7 +926,20 @@
   "extras": [],
   "conflicts": [],
   "precedences": [],
-  "externals": [],
+  "externals": [
+    {
+      "type": "SYMBOL",
+      "name": "xtlang_type"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "typed_identifier"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "generic_identifier"
+    }
+  ],
   "inline": [],
   "supertypes": []
 }
