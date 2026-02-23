@@ -24,9 +24,7 @@ bind-alias closure type
   (list
     (symbol)
     (symbol)
-    (symbol)
-    (unquote
-      (symbol))))
+    (xtlang_type)))
 
 ================================================================================
 bind-alias boolean

@@ -10,11 +10,7 @@ bind-type with tuple
   (list
     (symbol)
     (symbol)
-    (symbol)
-    (unquote
-      (symbol))
-    (unquote
-      (symbol))))
+    (xtlang_type)))
 
 ================================================================================
 bind-type with generic parameters
@@ -28,9 +24,7 @@ bind-type with generic parameters
   (list
     (symbol)
     (symbol)
-    (symbol)
-    (unquote
-      (symbol))))
+    (xtlang_type)))
 
 ================================================================================
 bind-type with generic pair
@@ -44,9 +38,7 @@ bind-type with generic pair
   (list
     (symbol)
     (symbol)
-    (symbol)
-    (unquote
-      (symbol))))
+    (xtlang_type)))
 
 ================================================================================
 bind-type with recursive type
@@ -60,9 +52,7 @@ bind-type with recursive type
   (list
     (symbol)
     (symbol)
-    (symbol)
-    (unquote
-      (symbol))))
+    (xtlang_type)))
 
 ================================================================================
 bind-type with named pointer
@@ -76,11 +66,7 @@ bind-type with named pointer
   (list
     (symbol)
     (symbol)
-    (symbol)
-    (unquote
-      (symbol))
-    (unquote
-      (symbol))))
+    (xtlang_type)))
 
 ================================================================================
 bind-type with array member
@@ -94,9 +80,7 @@ bind-type with array member
   (list
     (symbol)
     (symbol)
-    (symbol)
-    (unquote
-      (symbol))))
+    (xtlang_type)))
 
 ================================================================================
 bind-type simple no commas

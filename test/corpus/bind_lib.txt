@@ -11,9 +11,7 @@ bind-lib with closure type
     (symbol)
     (symbol)
     (symbol)
-    (symbol)
-    (unquote
-      (symbol))))
+    (xtlang_type)))
 
 ================================================================================
 bind-lib with void return
@@ -28,9 +26,7 @@ bind-lib with void return
     (symbol)
     (symbol)
     (symbol)
-    (symbol)
-    (unquote
-      (symbol))))
+    (xtlang_type)))
 
 ================================================================================
 bind-lib with multiple args
@@ -45,17 +41,7 @@ bind-lib with multiple args
     (symbol)
     (symbol)
     (symbol)
-    (symbol)
-    (unquote
-      (symbol))
-    (unquote
-      (symbol))
-    (unquote
-      (symbol))
-    (unquote
-      (symbol))
-    (unquote
-      (symbol))))
+    (xtlang_type)))
 
 ================================================================================
 bind-lib with simple types
@@ -70,9 +56,7 @@ bind-lib with simple types
     (symbol)
     (symbol)
     (symbol)
-    (symbol)
-    (unquote
-      (symbol))))
+    (xtlang_type)))
 
 ================================================================================
 bind-dylib

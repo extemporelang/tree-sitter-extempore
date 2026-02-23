@@ -11,7 +11,7 @@ bind-data with two constructors
 (program
   (list
     (symbol)
-    (symbol)
+    (generic_identifier)
     (list
       (symbol)
       (symbol)
@@ -35,14 +35,14 @@ bind-data with nested types
 (program
   (list
     (symbol)
-    (symbol)
+    (generic_identifier)
     (list
       (symbol)
-      (symbol)
+      (generic_identifier)
       (symbol))
     (list
       (symbol)
-      (symbol)
+      (generic_identifier)
       (symbol)
       (symbol))))
 
@@ -59,9 +59,7 @@ bind-data either type
 (program
   (list
     (symbol)
-    (symbol)
-    (unquote
-      (symbol))
+    (generic_identifier)
     (list
       (symbol)
       (symbol))
@@ -82,13 +80,13 @@ bind-data list monad
 (program
   (list
     (symbol)
-    (symbol)
+    (generic_identifier)
     (list
       (symbol))
     (list
       (symbol)
       (symbol)
-      (symbol))))
+      (generic_identifier))))
 
 ================================================================================
 bind-data simple pair
@@ -101,7 +99,7 @@ bind-data simple pair
 (program
   (list
     (symbol)
-    (symbol)
+    (generic_identifier)
     (list
       (symbol)
       (symbol)
@@ -120,7 +118,7 @@ bind-data option type
 (program
   (list
     (symbol)
-    (symbol)
+    (generic_identifier)
     (list
       (symbol)
       (symbol))

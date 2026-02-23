@@ -34,9 +34,7 @@ bind-func with closure type annotation
 (program
   (list
     (symbol)
-    (symbol)
-    (unquote
-      (symbol))
+    (typed_identifier)
     (list
       (symbol)
       (list
@@ -64,9 +62,7 @@ bind-func with complex return type
 (program
   (list
     (symbol)
-    (symbol)
-    (unquote
-      (symbol))
+    (typed_identifier)
     (list
       (symbol)
       (list
@@ -112,11 +108,7 @@ bind-func with generic types
 (program
   (list
     (symbol)
-    (symbol)
-    (unquote
-      (symbol))
-    (unquote
-      (symbol))
+    (typed_identifier)
     (list
       (symbol)
       (list
@@ -162,11 +154,7 @@ bind-func with multiple arguments
 (program
   (list
     (symbol)
-    (symbol)
-    (unquote
-      (symbol))
-    (unquote
-      (symbol))
+    (typed_identifier)
     (list
       (symbol)
       (list

@@ -40,9 +40,7 @@ closure type annotation
   (list
     (symbol)
     (list
-      (symbol)
-      (unquote
-        (symbol)))
+      (typed_identifier))
     (list
       (symbol)
       (number))))
@@ -61,9 +59,7 @@ tuple type in let
     (symbol)
     (list
       (list
-        (symbol)
-        (unquote
-          (symbol))
+        (typed_identifier)
         (list
           (symbol))))
     (symbol)))
@@ -82,9 +78,7 @@ array type annotation
     (symbol)
     (list
       (list
-        (symbol)
-        (unquote
-          (symbol))
+        (typed_identifier)
         (list
           (symbol))))
     (symbol)))
@@ -103,9 +97,7 @@ vector type annotation
     (symbol)
     (list
       (list
-        (symbol)
-        (unquote
-          (symbol))
+        (typed_identifier)
         (list
           (symbol))))
     (symbol)))
@@ -122,9 +114,7 @@ generic type variable
 (program
   (list
     (symbol)
-    (symbol)
-    (unquote
-      (symbol))
+    (typed_identifier)
     (list
       (symbol)
       (list

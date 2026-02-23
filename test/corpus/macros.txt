@@ -88,9 +88,7 @@ xtmtest-compile form
     (symbol)
     (list
       (symbol)
-      (symbol)
-      (unquote
-        (symbol))
+      (typed_identifier)
       (list
         (symbol)
         (list

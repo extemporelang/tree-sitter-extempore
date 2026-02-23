@@ -84,6 +84,4 @@ bind-val pointer type
   (list
     (symbol)
     (symbol)
-    (symbol)
-    (unquote
-      (symbol))))
+    (xtlang_type)))
