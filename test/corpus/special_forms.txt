@@ -35,7 +35,9 @@ memzone allocation
       (symbol)
       (list
         (list
-          (symbol)
+          (typed_identifier
+            (symbol)
+            (type_annotation))
           (list
             (symbol)
             (number))))
@@ -120,10 +122,14 @@ letz binding
     (symbol)
     (list
       (list
-        (symbol)
+        (typed_identifier
+          (symbol)
+          (type_annotation))
         (number))
       (list
-        (symbol)
+        (typed_identifier
+          (symbol)
+          (type_annotation))
         (number)))
     (list
       (symbol)

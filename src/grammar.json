@@ -22,6 +22,24 @@
         }
       ]
     },
+    "typed_identifier": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_typed_name"
+          },
+          "named": true,
+          "value": "symbol"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "type_annotation"
+        }
+      ]
+    },
     "_intertoken": {
       "type": "CHOICE",
       "members": [
@@ -933,7 +951,11 @@
     },
     {
       "type": "SYMBOL",
-      "name": "typed_identifier"
+      "name": "_typed_name"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "type_annotation"
     },
     {
       "type": "SYMBOL",
@@ -941,5 +963,6 @@
     }
   ],
   "inline": [],
-  "supertypes": []
+  "supertypes": [],
+  "reserved": {}
 }

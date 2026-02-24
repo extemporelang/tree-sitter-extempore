@@ -16,7 +16,9 @@ array of closures
     (list
       (symbol)
       (list
-        (typed_identifier))
+        (typed_identifier
+          (symbol)
+          (type_annotation)))
       (list
         (symbol)
         (list
@@ -76,13 +78,19 @@ closure returning pointer to closures
     (list
       (symbol)
       (list
-        (symbol)
-        (symbol))
+        (typed_identifier
+          (symbol)
+          (type_annotation))
+        (typed_identifier
+          (symbol)
+          (type_annotation)))
       (list
         (symbol)
         (list
           (list
-            (typed_identifier)
+            (typed_identifier
+              (symbol)
+              (type_annotation))
             (list
               (symbol)
               (symbol))))
@@ -173,7 +181,9 @@ typed identifier with queue type
   (list
     (symbol)
     (list
-      (typed_identifier))
+      (typed_identifier
+        (symbol)
+        (type_annotation)))
     (list
       (symbol)
       (symbol)
@@ -199,7 +209,9 @@ bind-func with zone allocation size
       (symbol)
       (list
         (list
-          (typed_identifier)
+          (typed_identifier
+            (symbol)
+            (type_annotation))
           (list
             (symbol))))
       (list
@@ -227,8 +239,12 @@ callback with typed arguments
     (list
       (symbol)
       (list
-        (symbol)
-        (symbol))
+        (typed_identifier
+          (symbol)
+          (type_annotation))
+        (typed_identifier
+          (symbol)
+          (type_annotation)))
       (list
         (symbol)
         (list

@@ -1,21 +1,20 @@
-; highlights.scm --- Extempore syntax highlighting queries
+; highlights.scm --- Extempore syntax highlighting
 ;
-; Pattern ordering matters: later patterns take priority over earlier ones.
-; The catch-all @function.call must come first so that more specific patterns
-; (keywords, builtins, bind-* forms) override it.
+; Pattern ordering: later patterns take priority over earlier ones.
+; The catch-all @function comes first so specific patterns override it.
 
-; Default: first symbol in a list is a function call (lowest priority)
+; Default: first element in a list is a function call (lowest priority)
 (list
   .
-  (symbol) @function.call)
+  (symbol) @function)
 
 ; xtlang type expressions
 (xtlang_type) @type
-(typed_identifier) @variable
+(typed_identifier (type_annotation) @type)
 (generic_identifier) @type
 
 ; Literals
-(number) @number
+(number) @constant.numeric
 (string) @string
 (escape_sequence) @string.escape
 (boolean) @constant.builtin
@@ -23,6 +22,7 @@
 
 ; Comments
 (comment) @comment
+(block_comment) @comment
 
 ; Punctuation
 ["(" ")"] @punctuation.bracket
@@ -33,6 +33,10 @@
 (quasiquote "`") @punctuation.special
 (unquote ",") @punctuation.special
 (unquote_splicing ",@") @punctuation.special
+
+; Bare type names (xtlang primitives)
+((symbol) @type.builtin
+ (#match? @type.builtin "^(i1|i8|i16|i32|i64|f|f32|f64|d|float|double|void)$"))
 
 ; Operators
 (list
@@ -76,14 +80,15 @@
   (symbol) @keyword
   (#match? @keyword "^(bind-func|bind-type|bind-data|bind-val|bind-lib|bind-dylib|bind-alias|bind-poly|bind-macro|bind-instrument|bind-sampler|definec|definec:dsp)$"))
 
-; Scheme definition forms
+; Scheme definition forms: (define name value)
 (list
   .
   (symbol) @keyword
   .
-  (symbol) @variable.definition
+  (symbol) @variable
   (#match? @keyword "^define$"))
 
+; Scheme definition forms: (define (name args...) body)
 (list
   .
   (symbol) @keyword
@@ -102,7 +107,7 @@
     (symbol) @function)
   (#match? @keyword "^define-macro$"))
 
-; xtlang binding forms: highlight the keyword and the name (highest priority)
+; xtlang binding forms: highlight the keyword and the name
 (list
   .
   (symbol) @keyword
@@ -114,35 +119,29 @@
   .
   (symbol) @keyword
   .
-  (typed_identifier) @function
+  (typed_identifier
+    (symbol) @function)
   (#match? @keyword "^bind-func$"))
 
 (list
   .
   (symbol) @keyword
   .
-  (symbol) @type.definition
-  (#match? @keyword "^bind-type$"))
+  (symbol) @type
+  (#match? @keyword "^(bind-type|bind-data|bind-alias)$"))
 
 (list
   .
   (symbol) @keyword
   .
-  (symbol) @type.definition
+  (generic_identifier) @type
   (#match? @keyword "^bind-data$"))
 
 (list
   .
   (symbol) @keyword
   .
-  (generic_identifier) @type.definition
-  (#match? @keyword "^bind-data$"))
-
-(list
-  .
-  (symbol) @keyword
-  .
-  (symbol) @variable.definition
+  (symbol) @variable
   (#match? @keyword "^bind-val$"))
 
 (list
@@ -150,25 +149,4 @@
   (symbol) @keyword
   .
   (symbol) @function
-  (#match? @keyword "^bind-lib$"))
-
-(list
-  .
-  (symbol) @keyword
-  .
-  (symbol) @type.definition
-  (#match? @keyword "^bind-alias$"))
-
-(list
-  .
-  (symbol) @keyword
-  .
-  (symbol) @function
-  (#match? @keyword "^bind-poly$"))
-
-(list
-  .
-  (symbol) @keyword
-  .
-  (symbol) @function
-  (#match? @keyword "^bind-macro$"))
+  (#match? @keyword "^(bind-lib|bind-poly|bind-macro)$"))

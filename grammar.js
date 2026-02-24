@@ -15,7 +15,7 @@ const PREC = {
 module.exports = grammar({
   name: "extempore",
 
-  externals: $ => [$.xtlang_type, $.typed_identifier, $.generic_identifier],
+  externals: $ => [$.xtlang_type, $._typed_name, $.type_annotation, $.generic_identifier],
 
   extras: _ => [],
 
@@ -26,6 +26,9 @@ module.exports = grammar({
       choice(
         $._intertoken,
         $._datum),
+
+    typed_identifier: $ =>
+      seq(alias($._typed_name, $.symbol), $.type_annotation),
 
     _intertoken: $ =>
       choice(

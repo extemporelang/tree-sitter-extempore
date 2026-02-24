@@ -95,7 +95,9 @@ typed identifier: closure type
 (program
   (list
     (symbol)
-    (typed_identifier)
+    (typed_identifier
+      (symbol)
+      (type_annotation))
     (list
       (symbol)
       (list
@@ -120,7 +122,9 @@ typed identifier: tuple type
     (symbol)
     (list
       (list
-        (typed_identifier)
+        (typed_identifier
+          (symbol)
+          (type_annotation))
         (list
           (symbol))))
     (symbol)))
@@ -139,7 +143,9 @@ typed identifier: array type
     (symbol)
     (list
       (list
-        (typed_identifier)
+        (typed_identifier
+          (symbol)
+          (type_annotation))
         (list
           (symbol))))
     (symbol)))
@@ -158,7 +164,9 @@ typed identifier: vector type
     (symbol)
     (list
       (list
-        (typed_identifier)
+        (typed_identifier
+          (symbol)
+          (type_annotation))
         (list
           (symbol))))
     (symbol)))
@@ -316,7 +324,7 @@ edge case: multiplication in expression
     (symbol)))
 
 ================================================================================
-edge case: x:i64 remains a symbol
+edge case: x:i64 is a typed identifier
 ================================================================================
 
 (lambda (x:i64) x)
@@ -327,7 +335,9 @@ edge case: x:i64 remains a symbol
   (list
     (symbol)
     (list
-      (symbol))
+      (typed_identifier
+        (symbol)
+        (type_annotation)))
     (symbol)))
 
 ================================================================================
@@ -359,7 +369,9 @@ typed identifier with generic type in closure
 (program
   (list
     (symbol)
-    (typed_identifier)
+    (typed_identifier
+      (symbol)
+      (type_annotation))
     (list
       (symbol)
       (list
@@ -393,11 +405,15 @@ edge case: closure env access with bracket type
 
 (program
   (list
-    (typed_identifier)
+    (typed_identifier
+      (symbol)
+      (type_annotation))
     (list
       (symbol)
       (list
-        (symbol))
+        (typed_identifier
+          (symbol)
+          (type_annotation)))
       (list
         (symbol)
         (symbol)

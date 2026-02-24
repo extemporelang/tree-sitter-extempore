@@ -336,6 +336,25 @@
     }
   },
   {
+    "type": "typed_identifier",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "symbol",
+          "named": true
+        },
+        {
+          "type": "type_annotation",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "unquote",
     "named": true,
     "fields": {},
@@ -629,7 +648,7 @@
     "named": true
   },
   {
-    "type": "typed_identifier",
+    "type": "type_annotation",
     "named": true
   },
   {
