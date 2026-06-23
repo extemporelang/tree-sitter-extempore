@@ -17,8 +17,8 @@ src="${1:-}"
 
 if [[ -z "$src" ]]; then
   src="$(mktemp -d)/extempore"
-  echo "Cloning extemporelang/extempore (shallow) into $src ..."
-  git clone --depth 1 https://github.com/extemporelang/extempore "$src"
+  echo "Cloning digego/extempore (shallow) into $src ..."
+  git clone --depth 1 https://github.com/digego/extempore "$src"
 fi
 
 if [[ ! -d "$src" ]]; then

@@ -43,7 +43,7 @@ jobs:
       - name: Checkout Extempore (.xtm sources only)
         uses: actions/checkout@v4
         with:
-          repository: extemporelang/extempore
+          repository: digego/extempore
           path: extempore
           # The grammar tracks the language, so test against the tip of master.
           ref: master
