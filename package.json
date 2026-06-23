@@ -7,8 +7,6 @@
     "url": "https://github.com/extemporelang/tree-sitter-extempore"
   },
   "license": "MIT",
-  "main": "bindings/node",
-  "types": "bindings/node",
   "keywords": [
     "parser",
     "tree-sitter",
@@ -18,25 +16,15 @@
   ],
   "files": [
     "grammar.js",
-    "binding.gyp",
-    "prebuilds/**",
-    "bindings/node/*",
     "queries/*",
-    "src/**",
-    "*.wasm"
+    "src/**"
   ],
-  "dependencies": {
-    "node-addon-api": "^8.0.0",
-    "node-gyp-build": "^4.8.0"
-  },
   "devDependencies": {
-    "tree-sitter-cli": "^0.24.0",
-    "prebuildify": "^6.0.0"
+    "tree-sitter-cli": "^0.26.0"
   },
   "scripts": {
     "generate": "tree-sitter generate",
     "test": "tree-sitter test",
-    "parse": "tree-sitter parse",
-    "build": "tree-sitter generate && node-gyp rebuild"
+    "parse": "tree-sitter parse"
   }
 }
