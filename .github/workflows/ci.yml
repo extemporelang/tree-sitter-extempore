@@ -8,6 +8,7 @@ on:
 
 jobs:
   test:
+    name: Generate and test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,22 +22,31 @@ jobs:
       - name: Generate parser
         run: npx tree-sitter generate
 
-      - name: Run tests
+      - name: Run corpus and highlight tests
         run: npx tree-sitter test
 
-      - name: Parse sample file
-        run: |
-          cat > /tmp/sample.xtm << 'EOF'
-          (bind-func add:[i64,i64,i64]*
-            (lambda (a b)
-              (+ a b)))
+  corpus:
+    name: Parse the Extempore source tree
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-          (bind-type Point <!a,!a>)
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
 
-          (define (square x) (* x x))
+      - run: npm ci
 
-          ;; a comment
-          #| block comment |#
-          (println "hello world")
-          EOF
-          npx tree-sitter parse /tmp/sample.xtm
+      - name: Generate parser
+        run: npx tree-sitter generate
+
+      - name: Checkout Extempore (.xtm sources only)
+        uses: actions/checkout@v4
+        with:
+          repository: extemporelang/extempore
+          path: extempore
+          # The grammar tracks the language, so test against the tip of master.
+          ref: master
+
+      - name: Parse every .xtm file (fail on any parse error)
+        run: ./script/parse-corpus.sh extempore
