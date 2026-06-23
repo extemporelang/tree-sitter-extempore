@@ -71,11 +71,21 @@ npx tree-sitter highlight path/to/file.xtm
 
 ## Grammar design
 
-The grammar matches Extempore's actual reader from `src/Scheme.cpp`. The
-tokeniser treats only `( ) ; " ' \` , #` and whitespace as special characters
---- everything else (including `[ ] { } < > | : * ! @ /`) is part of an atom.
-This means xtlang type annotations like `x:i64` and `<double,double>` are parsed
-as atoms separated by commas, matching the reader's behaviour.
+The grammar models Extempore's actual reader, which is s7 Scheme (`src/s7.c`,
+with the xtlang adapter in `src/SchemeS7.cpp`). s7 terminates an atom only at
+`( ) ; "` and whitespace; every other byte --- including
+`[ ] { } < > | : * ! @ /` and even `' \`
+, #`--- is a legal atom constituent. The`' \`
+, #`characters are special only when they *begin* a token, so`c#0`(a note name) and the trailing quote in`'FMSynth'`(read as`(quote
+|FMSynth'|)`) are both ordinary symbols.
+
+xtlang's type syntax (`x:i64`, `[i64,i64]*`, `<double,double>`, `|4,float|`,
+`Pair{!a,!b}`) is read by s7 as ordinary atoms and only interpreted later by the
+xtlang compiler. An external scanner (`src/scanner.c`) lifts those type strings
+into dedicated `typed_identifier`, `xtlang_type` and `generic_identifier` nodes
+so editors can highlight and navigate them. Because type strings never contain
+whitespace, the scanner bails the moment it hits a space --- which is also what
+stops a bare `<` (as in `<=`) from being mistaken for the start of a tuple type.
 
 ### Supported constructs
 
@@ -101,19 +111,26 @@ forms include `bind-func`, `bind-type`, `bind-val`, `bind-lib`, `bind-data`,
 Keyword lists are drawn from the
 [extempore-emacs-mode](https://github.com/extemporelang/extempore-emacs-mode).
 
+### Coverage
+
+Every `.xtm` file in the Extempore source tree parses without errors, and CI
+re-checks this on each change by parsing a fresh checkout (see
+`script/parse-corpus.sh`). Symbols containing `'` or `#` --- single-quoted words
+like `'FMSynth'` and note/chord names like `c#0`, `^7#4` --- now read as the
+single symbols s7 makes them.
+
 ### Known limitations
 
-Extempore's tokeniser gives `'` and `#` context-dependent semantics that can't
-be fully captured in a context-free grammar:
+Some of xtlang's syntax is genuinely semantic (resolved by the compiler, not the
+reader), so a context-free grammar can only approximate it with heuristics:
 
-- single-quoted xtlang strings (`'hello'`) are parsed as a quoted symbol with a
-  trailing quote in the name, which can cause parse errors when the trailing `'`
-  is interpreted as a new quote form
-- `#` inside symbol names (e.g. `c#0` for musical note names) triggers sharp
-  constant parsing
-
-These affect about 4% of `.xtm` files in the Extempore repo --- the remaining
-96% parse without errors.
+- a named type annotation (`x:Point`) is told apart from a namespaced Scheme
+  symbol (`sys:platform`) by capitalisation: an uppercase-led name after `:` is
+  treated as a type, a lowercase one as part of the symbol. A lowercase type
+  alias used as an annotation (e.g. `x:bool`) therefore still parses, but isn't
+  lifted to a `type_annotation` node for highlighting.
+- a symbol that contains both `#`/`'` and a type annotation (rare) is read as a
+  plain symbol rather than a `typed_identifier`.
 
 ## Acknowledgements
 

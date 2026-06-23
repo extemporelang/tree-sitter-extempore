@@ -1,8 +1,17 @@
 // Tree-sitter grammar for Extempore
 //
-// Matches Extempore's actual reader from src/Scheme.cpp.
-// Atom delimiters are: ( ) ; " ' ` , # and whitespace/control chars.
-// Everything else (including [ ] { } < > | : * ! @ / \) is part of an atom.
+// Models Extempore's actual reader, which is s7 Scheme (src/s7.c, plus the
+// xtlang adapter in src/SchemeS7.cpp). s7's char_ok_in_a_name table terminates
+// an atom only at ( ) ; " and whitespace/EOF; every other byte --- including
+// [ ] { } < > | : * ! @ / \ and even ' ` , # --- is a legal atom constituent.
+// The ' ` , # characters are special only when they *begin* a token, so the
+// symbol rule allows ' and # in a tail (see the symbol rule for details).
+//
+// xtlang's type syntax (x:i64, [i64,i64]*, <double,double>, |4,float|,
+// Pair{!a,!b}) is read by s7 as ordinary atoms and only interpreted later by
+// the xtlang compiler. This grammar lifts those type strings into dedicated
+// nodes (typed_identifier / xtlang_type / generic_identifier) via the external
+// scanner so editors can highlight and navigate them.
 //
 // Number, character, and escape sequence patterns adapted from
 // tree-sitter-scheme (https://github.com/6cdh/tree-sitter-scheme) by 6cdh
