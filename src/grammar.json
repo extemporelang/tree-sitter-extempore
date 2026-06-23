@@ -757,11 +757,20 @@
     "symbol": {
       "type": "TOKEN",
       "content": {
-        "type": "REPEAT1",
-        "content": {
-          "type": "PATTERN",
-          "value": "[^ \\r\\n\\t\\f\\v()\"',;`#]"
-        }
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "PATTERN",
+            "value": "[^ \\r\\n\\t\\f\\v()\";,`'#]"
+          },
+          {
+            "type": "REPEAT",
+            "content": {
+              "type": "PATTERN",
+              "value": "[^ \\r\\n\\t\\f\\v()\";,`]"
+            }
+          }
+        ]
       }
     },
     "list": {

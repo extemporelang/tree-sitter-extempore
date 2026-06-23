@@ -134,13 +134,22 @@ module.exports = grammar({
           seq("\\x", /[0-9a-fA-F]{2}/),
           seq("\\X", /[0-9a-fA-F]{2}/))),
 
-    // Symbols: everything that isn't a delimiter or special character.
-    // Extempore's atom delimiters from readstr_upto: ( ) ; \t \n \r space
-    // Additional token chars handled separately: " ' ` , #
-    // So a symbol is anything not in that set --- including [ ] { } < > | : * ! @ /
+    // Symbols: everything that isn't a delimiter or token-initiating special.
+    //
+    // s7's reader (src/s7.c, char_ok_in_a_name) terminates a name only at
+    // ( ) ; " and whitespace/EOF. Every other byte --- including ' and # ---
+    // is a legal *constituent* of a symbol; ' ` , # are special only when they
+    // *begin* a token. So `c#0`, `^7#4` (note/chord names) and the trailing
+    // quote in `'FMSynth'` (read as (quote |FMSynth'|)) are all single symbols.
+    //
+    // We model that by forbidding ' and # as the *first* character (so the
+    // quote and sharp rules win at token start) while allowing them in the
+    // tail. ` and , stay reserved everywhere as quasiquote/unquote initiators.
     symbol: _ =>
       token(
-        repeat1(/[^ \r\n\t\f\v()"',;`#]/)),
+        seq(
+          /[^ \r\n\t\f\v()";,`'#]/,
+          repeat(/[^ \r\n\t\f\v()";,`]/))),
 
     // --- compound data ---
 

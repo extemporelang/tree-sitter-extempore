@@ -80,6 +80,15 @@ static bool scan_simple_type(TSLexer *lexer) {
   return is_delimiter(lexer->lookahead);
 }
 
+// xtlang type strings never contain whitespace (e.g. [i64,i64]*, <double,double>,
+// |4,float|, Pair{!a,!b}). Hitting whitespace mid-scan therefore means this is not
+// a type at all --- crucially, it stops a leading `<`/`[` (think `<=`, or `[` used
+// loosely) from running forward across many lines of Scheme hunting a close bracket
+// and swallowing it as a bogus type.
+static bool is_type_space(int32_t c) {
+  return c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\f' || c == '\v';
+}
+
 static int32_t closing_bracket(int32_t open) {
   switch (open) {
     case '[': return ']';
@@ -111,7 +120,7 @@ static bool scan_bracket_type(TSLexer *lexer) {
 
   while (depth > 0) {
     int32_t c = lexer->lookahead;
-    if (c == 0) return false;
+    if (c == 0 || is_type_space(c)) return false;
 
     if (c == open && open != close) {
       depth++;
@@ -129,7 +138,7 @@ static bool scan_bracket_type(TSLexer *lexer) {
       lexer->advance(lexer, false);
       while (inner_depth > 0) {
         int32_t ic = lexer->lookahead;
-        if (ic == 0) return false;
+        if (ic == 0 || is_type_space(ic)) return false;
         if (ic == c && c != inner_close) {
           inner_depth++;
         } else if (ic == inner_close) {
@@ -143,6 +152,7 @@ static bool scan_bracket_type(TSLexer *lexer) {
         if (depth == 1) found_nested = true;
         int32_t ic = closing_bracket(c);
         while (lexer->lookahead != 0 && lexer->lookahead != ic) {
+          if (is_type_space(lexer->lookahead)) return false;
           lexer->advance(lexer, false);
         }
         if (lexer->lookahead == ic) {
