@@ -1,0 +1,33 @@
+(bind-func square:[i64,i64]* (lambda (x) (* x x)))
+; <- punctuation.bracket
+;^ keyword
+;          ^ function
+;                 ^ type
+;                             ^ keyword
+;                                         ^ operator
+
+(bind-type Point <double,double>)
+;^ keyword
+;          ^ type
+;                 ^ type
+
+(bind-val PI double 3.14159)
+;^ keyword
+;         ^ variable
+;                   ^ constant.numeric
+
+(define (add a b) (+ a b))
+;^ keyword
+;        ^ function
+
+(let ((nk:NOTE_KERNEL null)) nk)
+;         ^ type
+
+(car (list 1 2 3))
+;^ function.builtin
+
+"a string"
+; <- string
+
+#t
+; <- constant.builtin
