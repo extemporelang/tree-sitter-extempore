@@ -175,11 +175,50 @@ static bool scan_bracket_type(TSLexer *lexer) {
   return is_delimiter(lexer->lookahead);
 }
 
+// A user-defined named type after a colon: Point, NOTE_KERNEL, SAMPLE, String,
+// optionally generic (List{!a}) and/or a pointer (NOTE_KERNEL*). We only enter
+// here when the first char is uppercase, which is what separates a named type
+// from a namespaced Scheme symbol (sys:platform, xtc:aot, cl:remove are all
+// lowercase). Primitives (i64, float, ...) stay with scan_simple_type.
+static bool scan_named_type(TSLexer *lexer) {
+  while ((lexer->lookahead >= 'A' && lexer->lookahead <= 'Z') ||
+         (lexer->lookahead >= 'a' && lexer->lookahead <= 'z') ||
+         (lexer->lookahead >= '0' && lexer->lookahead <= '9') ||
+         lexer->lookahead == '_') {
+    lexer->advance(lexer, false);
+  }
+
+  // optional generic parameter list: {...}, possibly nested
+  if (lexer->lookahead == '{') {
+    lexer->advance(lexer, false);
+    int depth = 1;
+    bool found_content = false;
+    while (depth > 0) {
+      int32_t c = lexer->lookahead;
+      if (c == 0 || is_type_space(c)) return false;
+      if (c == '{') depth++;
+      else if (c == '}') depth--;
+      else found_content = true;
+      lexer->advance(lexer, false);
+    }
+    if (!found_content) return false;
+  }
+
+  while (lexer->lookahead == '*') {
+    lexer->advance(lexer, false);
+  }
+
+  return is_delimiter(lexer->lookahead);
+}
+
 static bool check_type_after_colon(TSLexer *lexer) {
   int32_t after_colon = lexer->lookahead;
   if (after_colon == '[' || after_colon == '<' || after_colon == '|' ||
       after_colon == '/') {
     return scan_bracket_type(lexer);
+  }
+  if (after_colon >= 'A' && after_colon <= 'Z') {
+    return scan_named_type(lexer);
   }
   return scan_simple_type(lexer);
 }
