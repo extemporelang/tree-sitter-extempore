@@ -172,16 +172,20 @@ module.exports = grammar({
     vector: $ =>
       seq("#(", repeat($._token), ")"),
 
+    // repeat (not optional): whitespace and comments are separate intertoken
+    // instances, so '  ;; c
+    //                foo
+    // needs several of them between the quote mark and the datum.
     quote: $ =>
-      seq("'", optional($._intertoken), $._datum),
+      seq("'", repeat($._intertoken), $._datum),
 
     quasiquote: $ =>
-      seq("`", optional($._intertoken), $._datum),
+      seq("`", repeat($._intertoken), $._datum),
 
     unquote: $ =>
-      seq(",", optional($._intertoken), $._datum),
+      seq(",", repeat($._intertoken), $._datum),
 
     unquote_splicing: $ =>
-      seq(",@", optional($._intertoken), $._datum),
+      seq(",@", repeat($._intertoken), $._datum),
   },
 });
