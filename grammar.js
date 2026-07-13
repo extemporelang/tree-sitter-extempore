@@ -102,10 +102,10 @@ module.exports = grammar({
         seq(sign, repeat1(digits10), /[eE]/, sign, repeat1(digits10), type_suffix));
       const rational = seq(sign, repeat1(digits10), "/", repeat1(digits10));
 
-      const hex = seq("#", /[xX]/, repeat1(digits16));
-      const binary = seq("#", /[bB]/, repeat1(/[01]/));
-      const octal = seq("#", /[oO]/, repeat1(/[0-7]/));
-      const decimal_prefix = seq("#", /[dD]/, repeat1(digits10));
+      const hex = seq("#", /[xX]/, sign, repeat1(digits16));
+      const binary = seq("#", /[bB]/, sign, repeat1(/[01]/));
+      const octal = seq("#", /[oO]/, sign, repeat1(/[0-7]/));
+      const decimal_prefix = seq("#", /[dD]/, sign, repeat1(digits10));
 
       return token(choice(hex, binary, octal, decimal_prefix, float_num, rational, integer));
     },
@@ -151,16 +151,17 @@ module.exports = grammar({
             /[^"\\]+/)),
         '"'),
 
+    // s7's string reader (read_string_constant) consumes *any* backslash pair
+    // and keeps scanning to the closing quote --- unknown escapes are handled
+    // (or rejected) later, never by terminating the string early. Matching any
+    // \<char> here mirrors that, so a stray "\q" or "\b" can't derail the
+    // parse. \x takes a hex run; \<newline> is a line continuation.
     escape_sequence: _ =>
       token(
         choice(
-          "\\\"",
-          "\\\\",
-          "\\n",
-          "\\t",
-          "\\r",
-          seq("\\x", /[0-9a-fA-F]{2}/),
-          seq("\\X", /[0-9a-fA-F]{2}/))),
+          seq(/\\[xX]/, /[0-9a-fA-F]+/),
+          /\\\r?\n/,
+          /\\./)),
 
     // Symbols: everything that isn't a delimiter or token-initiating special.
     //
