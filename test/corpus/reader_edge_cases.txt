@@ -162,3 +162,16 @@ real bracket type is still recognised next to ordinary code
       (list
         (symbol))
       (symbol))))
+
+================================================================================
+whitespace inside braces is not a generic identifier
+================================================================================
+
+(foo{a b})
+
+--------------------------------------------------------------------------------
+
+(program
+  (list
+    (symbol)
+    (symbol)))

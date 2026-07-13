@@ -291,7 +291,10 @@ bool tree_sitter_extempore_external_scanner_scan(
 
       while (depth > 0) {
         int32_t c = lexer->lookahead;
-        if (c == 0) return false;
+        // same rule as scan_named_type: type/generic strings never contain
+        // whitespace, so bail rather than swallow half the buffer when a
+        // stray { never closes on this line
+        if (c == 0 || is_type_space(c)) return false;
         if (c == '{') {
           depth++;
         } else if (c == '}') {
