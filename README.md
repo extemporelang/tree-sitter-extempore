@@ -73,11 +73,12 @@ npx tree-sitter highlight path/to/file.xtm
 
 The grammar models Extempore's actual reader, which is s7 Scheme (`src/s7.c`,
 with the xtlang adapter in `src/SchemeS7.cpp`). s7 terminates an atom only at
-`( ) ; "` and whitespace; every other byte --- including
-`[ ] { } < > | : * ! @ /` and even `' \`
-, #`--- is a legal atom constituent. The`' \`
-, #`characters are special only when they *begin* a token, so`c#0`(a note name) and the trailing quote in`'FMSynth'`(read as`(quote
-|FMSynth'|)`) are both ordinary symbols.
+`( ) ; "` and whitespace; every other byte --- brackets, braces, angle brackets,
+pipe, colon, star, and even the quote, backquote, comma, and sharp characters
+--- is a legal atom constituent. Those last four are special only when they
+_begin_ a token, so `c#0` (a note name) and the trailing quote in `'FMSynth'`
+(read by s7 as a quoted five-character symbol ending in a quote character) are
+both ordinary symbols.
 
 xtlang's type syntax (`x:i64`, `[i64,i64]*`, `<double,double>`, `|4,float|`,
 `Pair{!a,!b}`) is read by s7 as ordinary atoms and only interpreted later by the
@@ -92,10 +93,15 @@ stops a bare `<` (as in `<=`) from being mistaken for the start of a tuple type.
 - lists and dotted pairs
 - symbols (broad character set matching Extempore's reader)
 - numbers: integers, floats, scientific notation, hex (`#x`), binary (`#b`),
-  octal (`#o`), rationals (`3/4`), typed literals (`5:i64`, `3.0:f`)
-- strings with escape sequences
+  octal (`#o`), signed radix (`#x-ff`), rationals (`3/4`), typed literals
+  (`5:i64`, `3.0:f`)
+- strings with escape sequences (any `\<char>` pair, as s7 reads them, plus `\x`
+  hex runs and line continuations)
 - characters (`#\a`, `#\space`, `#\newline`, `#\tab`, `#\return`, `#\xHH`)
 - booleans (`#t`, `#f`)
+- sharp constants: any other `#...` atom, per s7's `read_sharp` fallback ---
+  `#_format` builtin references, `#true`, `#<eof>`; typed-vector prefixes
+  (`#i(...)`, `#u8(...)`) parse as a sharp constant followed by a list
 - vectors (`#(1 2 3)`)
 - comments: line (`;`), hashbang (`#!`), nestable block (`#| |#`)
 - quote forms: `'`, `` ` ``, `,`, `,@`
