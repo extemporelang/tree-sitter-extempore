@@ -19,6 +19,7 @@
 (escape_sequence) @string.escape
 (boolean) @constant.builtin
 (character) @constant.builtin
+(sharp_constant) @constant.builtin
 
 ; Comments
 (comment) @comment

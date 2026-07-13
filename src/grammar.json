@@ -143,6 +143,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "sharp_constant"
+        },
+        {
+          "type": "SYMBOL",
           "name": "xtlang_type"
         },
         {
@@ -667,6 +671,29 @@
                 "value": "[^\\s]"
               }
             ]
+          }
+        ]
+      }
+    },
+    "sharp_constant": {
+      "type": "TOKEN",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "#"
+          },
+          {
+            "type": "PATTERN",
+            "value": "[^ \\r\\n\\t\\f\\v()\";,`'#!|\\\\]"
+          },
+          {
+            "type": "REPEAT",
+            "content": {
+              "type": "PATTERN",
+              "value": "[^ \\r\\n\\t\\f\\v()\";,`]"
+            }
           }
         ]
       }

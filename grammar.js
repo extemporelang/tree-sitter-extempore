@@ -64,6 +64,7 @@ module.exports = grammar({
         $.character,
         $.string,
         $.number,
+        $.sharp_constant,
         $.xtlang_type,
         $.typed_identifier,
         $.generic_identifier,
@@ -122,6 +123,24 @@ module.exports = grammar({
             "tab",
             seq("x", /[0-9a-fA-F]+/),
             /[^\s]/))),
+
+    // s7's read_sharp: a #... atom that isn't a boolean, character, number,
+    // vector opener, or comment opener falls through to Token_Sharp_Const and
+    // is read to the next delimiter --- #_format (builtin reference, used in
+    // init.xtm), #true, #<eof>, and the typed-vector prefixes #i/#r/#u8 (their
+    // "(...)" then parses as an ordinary list). The first character after #
+    // excludes the openers handled by other rules ( ( \ | ! ' # ). No prec:
+    // lexical precedence trumps match *length*, so any nudge here would beat
+    // longer matches too. At equal precedence the longest match wins (#true,
+    // #x1.8 lex here as the single atoms s7 makes them) and exact-length ties
+    // fall to rule order, where boolean and number are defined first (#t stays
+    // a boolean, #x1F a number).
+    sharp_constant: _ =>
+      token(
+        seq(
+          "#",
+          /[^ \r\n\t\f\v()";,`'#!|\\]/,
+          repeat(/[^ \r\n\t\f\v()";,`]/))),
 
     string: $ =>
       seq(
