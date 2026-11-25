@@ -37,11 +37,10 @@ cp ~/.config/helix/runtime/grammars/sources/extempore/queries/*.scm \
 
 `hx --health extempore` should then tick the parser and every query. With the
 textobjects, `maf` selects the top-level form at the cursor and `]f`/`[f` move
-between forms. `indents.scm` reproduces the indentation of
-[extempore-emacs-mode](https://github.com/extemporelang/extempore-emacs-mode), so
-code formatted in either editor stays put in the other; it is written for the
-indent engine on Helix master (after 25.07.1), and rainbow brackets also need
-master.
+between forms. `indents.scm` follows Extempore's formatter (`extempore fmt`,
+which the language server also offers for format-on-save) as closely as Helix's
+indent engine allows; it is written for the engine on Helix master (after
+25.07.1), and rainbow brackets also need master.
 
 For evaluation, completion and diagnostics, add Extempore's language server
 (`extempore lsp`) as well: see
