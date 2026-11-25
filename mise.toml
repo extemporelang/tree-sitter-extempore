@@ -1,0 +1,3 @@
+[tools]
+tree-sitter = "latest"
+"github:ribru17/ts_query_ls" = "latest"

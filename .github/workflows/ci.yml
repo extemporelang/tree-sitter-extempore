@@ -8,40 +8,37 @@ on:
 
 jobs:
   test:
-    name: Generate and test
+    name: Generate, test and check queries
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v5
-        with:
-          node-version: "24"
+      - uses: jdx/mise-action@v5
 
-      - run: npm ci
+      # editors build src/parser.c from the repo, so it must match grammar.js
+      - name: Generated parser is up to date
+        run: |
+          tree-sitter generate
+          git diff --exit-code -- src
 
-      - name: Generate parser
-        run: npx tree-sitter generate
+      - name: Corpus and highlight tests
+        run: tree-sitter test
 
-      - name: Run corpus and highlight tests
-        run: npx tree-sitter test
+      - name: Queries are valid and formatted
+        run: |
+          tree-sitter build -o build/extempore.so
+          ts_query_ls check --format "$PWD/queries"
 
   corpus:
     name: Parse the Extempore source tree
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v5
-        with:
-          node-version: "24"
-
-      - run: npm ci
-
-      - name: Generate parser
-        run: npx tree-sitter generate
+      - uses: jdx/mise-action@v5
 
       - name: Checkout Extempore (.xtm sources only)
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           repository: digego/extempore
           path: extempore
