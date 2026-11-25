@@ -108,11 +108,16 @@ stops a bare `<` (as in `<=`) from being mistaken for the start of a tuple type.
 ### Highlight queries
 
 Everything in Extempore is `(list (symbol) ...)`, so the queries tell forms
-apart with `#any-of?` on the leading symbol: `bind-func` and friends, `define`,
-`lambda`, `let`, the control forms, and lists of Scheme and xtlang builtins.
-They highlight the names a form binds (functions, types, macros, variables),
-lambda parameters, docstrings, quoted data and xtlang types. Patterns run from
-general to specific, and the later of two patterns on a node wins.
+apart with `#any-of?` on the leading symbol. The xtlang word lists follow the
+compiler (`runtime/xtc-caches.xtm` and `xtc-transforms.xtm` in Extempore):
+special forms such as `lambdaz`/`lambdas`/`lambdah`, `letz`, `memzone` and
+`bind-func static`, the operators (`<>`, `&`, `bor`, `<<`), the memory and
+printing builtins, and numeric conversions (`ftod`, `i64tof`). Capitalised heads
+(`(Rat 1 2)`) are type constructors and all-caps names (`SAMPLE_RATE`) are
+constants. The queries highlight the names a form binds, parameters and
+bindings (including named `let` and `do`), docstrings, quoted data and `case`
+datums. Patterns run from general to specific, and the later of two patterns on
+a node wins.
 
 Keyword lists are drawn from the
 [extempore-emacs-mode](https://github.com/extemporelang/extempore-emacs-mode).
