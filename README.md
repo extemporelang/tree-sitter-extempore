@@ -4,35 +4,13 @@ A [tree-sitter](https://tree-sitter.github.io/) grammar for
 [Extempore](https://extemporelang.github.io/), the live coding environment for
 music, audio, and graphics.
 
-Provides syntax highlighting, code navigation, and structural editing support
-for `.xtm` files in editors with tree-sitter integration (Neovim, Helix, Zed,
-Emacs).
+The grammar parses `.xtm` files (Scheme and xtlang). The queries in `queries/`
+are written for [Helix](https://helix-editor.com): highlights, locals, indents,
+textobjects, rainbow brackets and tags, using Helix's capture names.
 
-## Usage
+## Helix
 
-### Neovim
-
-Add the parser to your nvim-treesitter config:
-
-```lua
-local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-parser_config.extempore = {
-  install_info = {
-    url = "https://github.com/extemporelang/tree-sitter-extempore",
-    files = { "src/parser.c" },
-  },
-  filetype = "extempore",
-}
-
-vim.filetype.add({ extension = { xtm = "extempore" } })
-```
-
-Then run `:TSInstall extempore` and copy the `queries/` directory to your
-nvim-treesitter queries path.
-
-### Helix
-
-Add to `languages.toml`:
+Add the language and grammar to `~/.config/helix/languages.toml`:
 
 ```toml
 [[language]]
@@ -40,6 +18,7 @@ name = "extempore"
 scope = "source.extempore"
 file-types = ["xtm"]
 comment-token = ";"
+block-comment-tokens = { start = "#|", end = "|#" }
 indent = { tab-width = 2, unit = "  " }
 
 [[grammar]]
@@ -47,27 +26,46 @@ name = "extempore"
 source = { git = "https://github.com/extemporelang/tree-sitter-extempore", rev = "main" }
 ```
 
-Then run `hx --grammar fetch` and `hx --grammar build`.
+Then fetch and build the grammar and install its queries:
+
+```bash
+hx --grammar fetch && hx --grammar build
+mkdir -p ~/.config/helix/runtime/queries/extempore
+cp ~/.config/helix/runtime/grammars/sources/extempore/queries/*.scm \
+  ~/.config/helix/runtime/queries/extempore/
+```
+
+`hx --health extempore` should then tick the parser and every query. With the
+textobjects, `maf` selects the top-level form at the cursor and `]f`/`[f` move
+between forms.
+
+For evaluation, completion and diagnostics, add Extempore's language server
+(`extempore lsp`) as well: see
+[the Helix section of Extempore's editor guide](https://github.com/digego/extempore/blob/master/docs/src/content/docs/guides/editor-support.md#helix).
+
+## Other editors
+
+`src/` holds the generated parser (`parser.c` and the external scanner
+`scanner.c`), which is what editors compile. The queries use Helix's capture
+names and its locals convention (`@local.definition.variable.parameter`), so
+other editors will need their own.
 
 ## Development
 
-```bash
-npm install
-npx tree-sitter generate
-npx tree-sitter test
-```
-
-Parse a file:
+The tools (the tree-sitter CLI and
+[ts_query_ls](https://github.com/ribru17/ts_query_ls)) come from `mise.toml`:
 
 ```bash
-npx tree-sitter parse path/to/file.xtm
+mise install
+tree-sitter generate      # after editing grammar.js; commit src/ with it
+tree-sitter test          # corpus (test/corpus) and highlight (test/highlight) tests
+tree-sitter build -o build/extempore.so && ts_query_ls check --format "$PWD/queries"
+script/parse-corpus.sh    # parse every .xtm in an Extempore checkout
 ```
 
-Preview highlighting:
-
-```bash
-npx tree-sitter highlight path/to/file.xtm
-```
+`ts_query_ls format "$PWD/queries"` formats the queries. `.tsqueryrc.json` lists
+the capture names each query may use; for highlights, these are
+[Helix's theme scopes](https://docs.helix-editor.com/themes.html#syntax-highlighting).
 
 ## Grammar design
 
@@ -108,11 +106,12 @@ stops a bare `<` (as in `<=`) from being mistaken for the start of a tuple type.
 
 ### Highlight queries
 
-The highlight queries use `#match?` predicates on symbol text to provide
-semantic highlighting without grammar rules for every construct. Highlighted
-forms include `bind-func`, `bind-type`, `bind-val`, `bind-lib`, `bind-data`,
-`bind-alias`, `bind-poly`, `define`, `define-macro`, `lambda`, `let`, `cond`,
-`if`, `begin`, `dotimes`, `memzone`, `callback`, and Scheme/xtlang builtins.
+Everything in Extempore is `(list (symbol) ...)`, so the queries tell forms
+apart with `#any-of?` on the leading symbol: `bind-func` and friends, `define`,
+`lambda`, `let`, the control forms, and lists of Scheme and xtlang builtins.
+They highlight the names a form binds (functions, types, macros, variables),
+lambda parameters, docstrings, quoted data and xtlang types. Patterns run from
+general to specific, and the later of two patterns on a node wins.
 
 Keyword lists are drawn from the
 [extempore-emacs-mode](https://github.com/extemporelang/extempore-emacs-mode).
