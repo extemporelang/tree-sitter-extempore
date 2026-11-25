@@ -104,7 +104,8 @@
       "extend": "a Helix indent capture",
       "extend.prevent-once": "a Helix indent capture",
       "indent.always": "a Helix indent capture",
-      "outdent.always": "a Helix indent capture"
+      "outdent.always": "a Helix indent capture",
+      "opaque": "keep a literal's indentation"
     },
     "tags": {
       "name": "a tags capture",
