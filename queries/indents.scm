@@ -23,45 +23,81 @@
 ; The keyword regex is anchored exact-match (except the `def` prefix) so it
 ; tracks the Emacs `put`-table one-for-one. `set!` is intentionally absent (it
 ; is not in the Emacs table, so it operand-aligns, matching Emacs/scmindent).
-
 ; --- operand alignment (forms that are NOT special) ---
-
 ; If a list has 2 elements on the first line, align to the second element.
 ; Exclude literal first elements (different rule below) and the keyword set.
-(list . (_) @first . (_) @anchor
-  (#same-line? @first @anchor)
+(list
+  .
+  (_) @_first
+  .
+  (_) @anchor
+  (#same-line? @_first @anchor)
   (#set! "scope" "tail")
-  (#not-kind-eq? @first "boolean") (#not-kind-eq? @first "character")
-  (#not-kind-eq? @first "string") (#not-kind-eq? @first "number")
-  (#not-match? @first "^(def.*|let|letz|let[*]|letrec|let-syntax|letrec-syntax|lambda|case|dotimes|doloop|while|memzone|begin|delay|bind-func|bind-macro|bind-poly|bind-type|bind-val|bind-lib|bind-dylib|syntax-rules|syntax-case|call-with-input-file|with-input-from-file|with-input-from-port|call-with-output-file|with-output-to-file|with-output-to-port|call-with-values|dynamic-wind)$")) @align
+  (#not-kind-eq? @_first "boolean")
+  (#not-kind-eq? @_first "character")
+  (#not-kind-eq? @_first "string")
+  (#not-kind-eq? @_first "number")
+  (#not-match? @_first
+    "^(def.*|let|letz|let[*]|letrec|let-syntax|letrec-syntax|lambda|case|dotimes|doloop|while|memzone|begin|delay|bind-func|bind-macro|bind-poly|bind-type|bind-val|bind-lib|bind-dylib|syntax-rules|syntax-case|call-with-input-file|with-input-from-file|with-input-from-port|call-with-output-file|with-output-to-file|with-output-to-port|call-with-values|dynamic-wind)$")) @align
 
 ; If the first element is itself a list alone on its line, align the outer list
 ; to it.
-(list . (list) @anchor .
+(list
+  .
+  (list) @anchor
+  .
   (#set! "scope" "tail")) @align
-(list . (list) @anchor . (_) @second
-  (#not-same-line? @anchor @second)
+
+(list
+  .
+  (list) @anchor
+  .
+  (_) @_second
+  (#not-same-line? @anchor @_second)
   (#set! "scope" "tail")) @align
 
 ; If the first element is not a list and sits on a line by itself, indent the
 ; outer list one step (this is scmindent's "+1 space" reduced to a fixed step,
 ; exact when indent width is 2 and there is no space after the open paren).
-(list . (_) @first .
-  (#not-kind-eq? @first "boolean") (#not-kind-eq? @first "character")
-  (#not-kind-eq? @first "string") (#not-kind-eq? @first "number")
-  (#not-match? @first "^(def.*|let|letz|let[*]|letrec|let-syntax|letrec-syntax|lambda|case|dotimes|doloop|while|memzone|begin|delay|bind-func|bind-macro|bind-poly|bind-type|bind-val|bind-lib|bind-dylib|syntax-rules|syntax-case|call-with-input-file|with-input-from-file|with-input-from-port|call-with-output-file|with-output-to-file|with-output-to-port|call-with-values|dynamic-wind)$")) @indent
-(list . (_) @first . (_) @second
-  (#not-same-line? @first @second)
-  (#not-kind-eq? @first "boolean") (#not-kind-eq? @first "character")
-  (#not-kind-eq? @first "string") (#not-kind-eq? @first "number")
-  (#not-match? @first "^(def.*|let|letz|let[*]|letrec|let-syntax|letrec-syntax|lambda|case|dotimes|doloop|while|memzone|begin|delay|bind-func|bind-macro|bind-poly|bind-type|bind-val|bind-lib|bind-dylib|syntax-rules|syntax-case|call-with-input-file|with-input-from-file|with-input-from-port|call-with-output-file|with-output-to-file|with-output-to-port|call-with-values|dynamic-wind)$")) @indent
+(list
+  .
+  (_) @_first
+  .
+  (#not-kind-eq? @_first "boolean")
+  (#not-kind-eq? @_first "character")
+  (#not-kind-eq? @_first "string")
+  (#not-kind-eq? @_first "number")
+  (#not-match? @_first
+    "^(def.*|let|letz|let[*]|letrec|let-syntax|letrec-syntax|lambda|case|dotimes|doloop|while|memzone|begin|delay|bind-func|bind-macro|bind-poly|bind-type|bind-val|bind-lib|bind-dylib|syntax-rules|syntax-case|call-with-input-file|with-input-from-file|with-input-from-port|call-with-output-file|with-output-to-file|with-output-to-port|call-with-values|dynamic-wind)$")) @indent
+
+(list
+  .
+  (_) @_first
+  .
+  (_) @_second
+  (#not-same-line? @_first @_second)
+  (#not-kind-eq? @_first "boolean")
+  (#not-kind-eq? @_first "character")
+  (#not-kind-eq? @_first "string")
+  (#not-kind-eq? @_first "number")
+  (#not-match? @_first
+    "^(def.*|let|letz|let[*]|letrec|let-syntax|letrec-syntax|lambda|case|dotimes|doloop|while|memzone|begin|delay|bind-func|bind-macro|bind-poly|bind-type|bind-val|bind-lib|bind-dylib|syntax-rules|syntax-case|call-with-input-file|with-input-from-file|with-input-from-port|call-with-output-file|with-output-to-file|with-output-to-port|call-with-values|dynamic-wind)$")) @indent
 
 ; If the first element is a literal, align the list to it.
-(list . [(boolean) (character) (string) (number)] @anchor
+(list
+  .
+  [
+    (boolean)
+    (character)
+    (string)
+    (number)
+  ] @anchor
   (#set! "scope" "tail")) @align
 
 ; --- special forms: fixed-step body indent ---
-
 ; def-prefixed and the explicit keyword set indent their body one step.
-(list . (symbol) @first
-  (#match? @first "^(def.*|let|letz|let[*]|letrec|let-syntax|letrec-syntax|lambda|case|dotimes|doloop|while|memzone|begin|delay|bind-func|bind-macro|bind-poly|bind-type|bind-val|bind-lib|bind-dylib|syntax-rules|syntax-case|call-with-input-file|with-input-from-file|with-input-from-port|call-with-output-file|with-output-to-file|with-output-to-port|call-with-values|dynamic-wind)$")) @indent
+(list
+  .
+  (symbol) @_first
+  (#match? @_first
+    "^(def.*|let|letz|let[*]|letrec|let-syntax|letrec-syntax|lambda|case|dotimes|doloop|while|memzone|begin|delay|bind-func|bind-macro|bind-poly|bind-type|bind-val|bind-lib|bind-dylib|syntax-rules|syntax-case|call-with-input-file|with-input-from-file|with-input-from-port|call-with-output-file|with-output-to-file|with-output-to-port|call-with-values|dynamic-wind)$")) @indent

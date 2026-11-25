@@ -1,47 +1,72 @@
-; locals.scm --- Extempore scope and variable tracking
-
-; Scope-creating forms
+; locals.scm --- scopes, the names they bind, and references to them
+;
+; A reference to a name bound in an enclosing scope takes the highlight of its
+; definition, so a lambda's parameters stay parameter-coloured in its body.
+; The capture names follow Helix (@local.definition.variable.parameter); the
+; tree-sitter CLI doesn't resolve these references.
+; --- scopes ---
 (list
   .
-  (symbol) @_keyword
-  (#match? @_keyword "^(lambda|let|let\\*|letrec|letz|do|dolet|dotimes|doloop|memzone)$")) @local.scope
+  (symbol) @_k
+  (#any-of? @_k "lambda" "let" "let*" "letrec" "letz" "dotimes" "doloop" "memzone")) @local.scope
 
-; bind-func creates a scope
+; (define (name param ...) body) scopes its parameters
 (list
   .
-  (symbol) @_keyword
-  (#match? @_keyword "^(bind-func|definec)$")) @local.scope
+  (symbol) @_k
+  .
+  (list)
+  (#eq? @_k "define")) @local.scope
 
-; define creates a definition
+; --- definitions ---
 (list
   .
-  (symbol) @_keyword
+  (symbol) @_k
   .
-  (symbol) @local.definition
-  (#match? @_keyword "^(define|bind-val)$"))
-
-; bind-func name (symbol or typed_identifier)
-(list
-  .
-  (symbol) @_keyword
-  .
-  (symbol) @local.definition
-  (#match? @_keyword "^(bind-func|definec|bind-macro|define-macro)$"))
+  (list
+    [
+      (symbol) @local.definition.variable.parameter
+      (typed_identifier
+        (symbol) @local.definition.variable.parameter)
+    ])
+  (#eq? @_k "lambda"))
 
 (list
   .
-  (symbol) @_keyword
+  (symbol) @_k
   .
-  (typed_identifier) @local.definition
-  (#match? @_keyword "^(bind-func|definec)$"))
+  (list
+    .
+    (symbol)
+    (symbol) @local.definition.variable.parameter)
+  (#eq? @_k "define"))
 
-; bind-data name (generic_identifier)
 (list
   .
-  (symbol) @_keyword
+  (symbol) @_k
   .
-  (generic_identifier) @local.definition
-  (#match? @_keyword "^bind-data$"))
+  (list
+    (list
+      .
+      [
+        (symbol) @local.definition.variable
+        (typed_identifier
+          (symbol) @local.definition.variable)
+      ]))
+  (#any-of? @_k "let" "let*" "letrec" "letz"))
 
-; Symbol references
+(list
+  .
+  (symbol) @_k
+  .
+  (list
+    .
+    [
+      (symbol) @local.definition.variable
+      (typed_identifier
+        (symbol) @local.definition.variable)
+    ])
+  (#any-of? @_k "dotimes" "doloop"))
+
+; --- references ---
 (symbol) @local.reference
